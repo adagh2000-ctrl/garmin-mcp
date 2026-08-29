@@ -282,7 +282,12 @@ async def login_submit(request: Request):
             kwargs["prompt_mfa"] = lambda: mfa
         client = Garmin(**kwargs)
         client.login()
-        client.garth.dump(GARMIN_TOKEN_DIR)
+        garth_client = getattr(client, "garth", None) or getattr(client, "client", None)
+        if garth_client is not None:
+            try:
+                garth_client.dump(GARMIN_TOKEN_DIR)
+            except Exception:
+                pass  # sin persistencia; la sesión vive en memoria
         _garmin_client = client
     except Exception as e:
         err = f'<div class="err">No se pudo iniciar sesión: {html.escape(str(e))}<br>Si tienes MFA, incluye el código.</div>'
