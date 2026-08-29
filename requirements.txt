@@ -1,0 +1,4 @@
+mcp>=2.0
+garminconnect>=0.2.19
+uvicorn>=0.30
+python-multipart>=0.0.9
